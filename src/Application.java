@@ -4,10 +4,13 @@ public class Application {
     public static void main(String[] args) throws InterruptedException {
         TankFrame tf = new TankFrame();
         tf.setVisible(true);
-
         while (true) {
-            Thread.sleep(100);
-            tf.repaint();
+            try {
+                Thread.sleep(50);
+                tf.repaint();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
