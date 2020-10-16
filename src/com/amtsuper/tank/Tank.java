@@ -17,29 +17,17 @@ public class Tank {
     public void moveTo(Direction newDir) {
         dir = newDir;
         switch (dir) {
-            case RIGHT: {
-                int x = pos.getX();
-                x = Math.min(x + Definitions.TANK_SPEED, 800 - Definitions.TANK_SIZE);
-                pos.setX(x);
-            }
+            case RIGHT:
+                pos.setX(pos.getX() + Definitions.TANK_SPEED);
                 break;
-            case LEFT: {
-                int x = pos.getX();
-                x = Math.max(x - Definitions.TANK_SPEED, 0);
-                pos.setX(x);
-            }
+            case LEFT:
+                pos.setX(pos.getX() - Definitions.TANK_SPEED);
                 break;
-            case UP: {
-                int y = pos.getY();
-                y = Math.max(y - Definitions.TANK_SPEED, 0);
-                pos.setY(y);
-            }
+            case UP:
+                pos.setY(pos.getY() - Definitions.TANK_SPEED);
                 break;
-            case DOWN: {
-                int y = pos.getY();
-                y = Math.min(y + Definitions.TANK_SPEED, 600 - Definitions.TANK_SIZE);
-                pos.setY(y);
-            }
+            case DOWN:
+                pos.setY(pos.getY() + Definitions.TANK_SPEED);
                 break;
             default: break;
         }
@@ -47,7 +35,15 @@ public class Tank {
 
     // 坦克自绘
     public void paint(Graphics g) {
+        Color c = g.getColor();
+        g.setColor(Color.GRAY);
         g.fillRect(pos.getX(), pos.getY(), Definitions.TANK_SIZE, Definitions.TANK_SIZE);
+        g.setColor(c);
+    }
+
+    // 开火
+    public void fire() {
+
     }
 
 }

@@ -28,6 +28,8 @@ public class TankFrame extends Frame {
                     myTank.moveTo(Direction.LEFT); break;
                 case KeyEvent.VK_RIGHT:
                     myTank.moveTo(Direction.RIGHT); break;
+                case KeyEvent.VK_SPACE:
+                    myTank.fire(); break;
                 default:
                     myTank.moveTo(Direction.NONE); break;
             }
@@ -43,7 +45,12 @@ public class TankFrame extends Frame {
     private final TFKeyboardAdapter M_KEY_ADAPTOR = new TFKeyboardAdapter();
     private Tank myTank = new Tank(
             new Position(Definitions.FRAME_WIDTH / 2 - Definitions.TANK_SIZE,
-                    Definitions.FRAME_HEIGHT - Definitions.TANK_SIZE)
+                    Definitions.FRAME_HEIGHT - Definitions.TANK_SIZE,
+                    new TankDirSetStrategy())
+    );
+    private Bullet myBullet = new Bullet(
+            new Position(50, 0, new BulletDirSetStrategy()),
+            Direction.DOWN
     );
 
     public TankFrame() {
@@ -67,6 +74,23 @@ public class TankFrame extends Frame {
     public void paint(Graphics g) {
         super.paint(g);
         myTank.paint(g);
+        myBullet.paint(g);
     }
 
+    // 使用双缓冲机制，避免屏幕闪烁
+    private Image offscreenImage = null;
+    @Override
+    public void update(Graphics g) {
+        super.update(g);
+        if (offscreenImage == null) {
+            offscreenImage = this.createImage(Definitions.FRAME_WIDTH, Definitions.FRAME_HEIGHT);
+        }
+        Graphics gOffscreen = offscreenImage.getGraphics();
+        Color c = gOffscreen.getColor();
+        gOffscreen.setColor(Color.BLACK);
+        gOffscreen.fillRect(0, 0, Definitions.FRAME_WIDTH, Definitions.FRAME_HEIGHT);
+        gOffscreen.setColor(c);
+        paint(gOffscreen);
+        g.drawImage(offscreenImage, 0, 0, null);
+    }
 }
